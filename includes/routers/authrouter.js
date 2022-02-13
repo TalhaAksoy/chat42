@@ -17,7 +17,7 @@
 
 const AbstractRouter	= require('./abstractrouter');
 const session			= require('express-session');
-const Token				= require('../token');
+const Api42				= require('../api');
 const { log, error }	= require('../logger');
 
 class AuthRouter extends AbstractRouter
@@ -41,8 +41,19 @@ class AuthRouter extends AbstractRouter
 			next();
 		});
 		
-		// GET
-		this.router.get('/lu', async (req, res) => this.log_user(req, res));
+		// GET - login user
+		this.router.get('/lu', async (req, res) => this.logUser(req, res));
+		this.router.get('/userinfo', async (req, res) => this.userInfo(req, res));
+	}
+
+	async userInfo(req, res)
+	{
+		if(req.isLogged())
+		{
+			res.send(req.session.user);
+			return ;
+		}
+		res.send(false);
 	}
 
 	isLogged(sessionId)
@@ -50,7 +61,7 @@ class AuthRouter extends AbstractRouter
 		return this.sessionStore.sessions[sessionId] ? true : false;
 	}
 
-	async log_user(req, res)
+	async logUser(req, res)
 	{
 		
 		if (req.isLogged())
@@ -63,9 +74,8 @@ class AuthRouter extends AbstractRouter
 		{
 			try
 			{
-				let userToken = new Token(req.query.code);
-				await userToken.getToken();
-				req.session.user = userToken;
+				let api = new Api42();
+				req.session.user = await api.callApi(req.query.code, 'users/me');
 				res.send(true);
 				return ;
 			}

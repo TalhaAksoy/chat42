@@ -19,4 +19,34 @@ const DBConnection	= require('./dbconnection');
 
 class DBUser extends DBConnection
 {
+	constructor(conn)
+	{
+		super(conn);
+	}
+
+	async getUser(username)
+	{
+		return (await (this.queryByColumn('users', '*', username, 'username')))[0];
+	}
+
+	async setUser(obj)
+	{
+		try
+		{
+			var query = {
+				text: "UPDATE users SET username = $1, roles = $2, pp = $3, fullname = $4 WHERE username = $1",
+				values: [obj.username, obj.roles, obj.pp, obj.fullname]
+			};
+
+
+		}
+		catch
+		{
+			var query = {
+				text: "INSERT INTO users(username, roles, pp, fullname) VALUES ($1, $2, $3, $4)",
+				values: [obj.username, obj.roles, obj.pp, obj.fullname]
+			};
+			
+		}
+	}
 }

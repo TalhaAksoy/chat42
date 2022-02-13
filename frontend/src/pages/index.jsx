@@ -53,7 +53,7 @@ export default class Index extends Component
 
 	render() {
 		return (
-			<div className={`theme-${this.themeName} theme-Light h-screen flex flex-row overflow-hidden main-div`}>
+			<div className={`theme-${this.themeName} theme-Light h-screen overflow-hidden flex flex-row main-div`}>
 				<div className="rightBar flex flex-col w-1/6">
 					<div id = "logo" className="logo bg-gray-800 grow border-solid border-1 py-2 flex flex-row justify-center items-center">
 						<div className="text-white">
@@ -63,7 +63,7 @@ export default class Index extends Component
 						</div>
 						<span class = "text-white font-bold">Chat</span>
 					</div>
-					<div className="channel bg-gray-800 grow border-solid border-1  hover:overflow-y-auto">
+					<div className="channel bg-gray-800 grow border-solid border-1 hover:overflow-y-auto">
 						<ChannelTemplate channelName = "Hello World! :D"></ChannelTemplate>
 						<ChannelTemplate channelName = "Hello World! :D"></ChannelTemplate>
 						<ChannelTemplate channelName = "Hello World! :D"></ChannelTemplate>
@@ -100,8 +100,8 @@ export default class Index extends Component
 						<ChannelTemplate channelName = "Hello World! :D"></ChannelTemplate>
 					</div>
 				</div>
-				<div className={ `grow flex flex-col w-5/6`}>
-					<nav className="nav-bar bg-blue-600 flex flex-row">
+				<div className={ `grow flex flex-col w-5/6 h-12/12`}>
+					<nav className="nav-bar bg-blue-600 flex flex-row h-2/12">
 
 						<div className="nav-mid bg-green-600 w-11/12 h-full">
 							<Contacts></Contacts>
@@ -114,9 +114,9 @@ export default class Index extends Component
 					</nav>
 
 
-					<div className="mesage-area bg-blue-600 w-full flex flex-col grow">
-						<div className={ "mesasge-show bg-gray-800 w-full h-20 grow overflow-y-auto" }>
-							{  this.state.messages }
+					<div className="message-area bg-blue-600 w-full flex-1 flex flex-col grow h-10/12">
+						<div className={ "message-show bg-gray-800 w-full h-20 flex-auto grow overflow-y-auto" }>
+							<div className={ "message-show bg-gray-800 w-full"}>{  this.state.messages }</div>
 						</div>
 						<div className="message-type bg-pink-500 w-full h-1/6 float-left">
 							<textarea onKeyPress={ (e) => this.handleKeyPress(e) } name="" id="" className="float-left w-10/12 rounded-none h-4/6 resize-none text-area"></textarea>

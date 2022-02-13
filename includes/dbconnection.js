@@ -19,22 +19,27 @@ const { Client } 	= require('pg');
 
 class DBConnection
 {
-	#conn = undefined;
+	constructor(conn=undefined) 
+	{
+		this.conn = conn;
+	}
 
-	constructor() { }
-
-	async connect() {
-		this.#conn = new Client({
+	async connect()
+	{
+		if (this.conn)
+			return ;
+		this.conn = new Client({
 			host: 'localhost',
 			user: 'postgres',
 			database: 'postgres'
 		});
 
-		await this.#conn.connect();
+		await this.conn.connect();
 	}
 	
 	async queryByColumn(table, cols=undefined, id=undefined, idcol=undefined, ordercol=undefined, orderby=undefined)
 	{
+		if (cols == '*') cols = undefined;
 		var query = {
 			text: `SELECT ${cols ? cols.join(',') : '*'} FROM ${table}`,
 			values: id ? [id] : []
@@ -44,17 +49,17 @@ class DBConnection
 			query.text += ` WHERE ${idcol} = \$1`;
 		if(ordercol && orderby)
 			query.text += `ORDER BY ${ordercol} ${orderby}`;
-		return (await this.#conn.query(query)).rows;
+		return (await this.conn.query(query)).rows;
 	}
 
 	async query(query)
 	{
-		return (await this.#conn.query(query));
+		return (await this.conn.query(query));
 	}
 
 	async close()
 	{
-		await this.#conn.end();
+		await this.conn.end();
 	}
 }
 
