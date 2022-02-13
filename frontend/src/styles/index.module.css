@@ -1,0 +1,63 @@
+/* Light Theme Start */
+.main-div /*Tamamı*/
+{
+	width:100%;
+	overflow: hidden;
+	height: 100vh;
+}
+#logo /*Logo Divi*/
+{
+	width: 100%;
+	height: 100%;
+	background-color: red !important;
+}
+.text-bar
+{
+	width:100%;
+	height: 100%;
+	background-color: blue;
+}
+.add-message
+{
+	width:100%;
+	height: 100%;
+	background-color: yellow;
+}
+/*  */
+.mid-place
+{
+	width:100%;
+	height: 100vh;
+	background-image: linear-gradient(to left,blue,aqua);
+}
+.channels
+{
+	width:100%;
+	height: 100%;
+	background-color: black;
+}
+.message-area
+{
+	width:100%;
+	height: 100%;
+	background-color: burlywood;
+}
+.message-view
+{
+	width:100%;
+	height: 75vh;
+	background-color: lightgray;
+}
+.message-type
+{
+	width:100%;
+	background-color: green;
+}
+.profile-settings-button
+{
+	width: 100%;
+	text-align: center;
+	background-color: red;
+}
+/* Light Theme End*/
+

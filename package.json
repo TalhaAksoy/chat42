@@ -1,0 +1,33 @@
+{
+  "name": "chat42",
+  "version": "1.0.0",
+  "description": "42 Türkiye kampüsleri içerisinde kullanılmak üzere oluşturumuş mesajlaşma uygulaması ",
+  "main": "index.js",
+  "scripts": {
+    "start": "node .",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/TalhaAksoy/chat42.git"
+  },
+  "keywords": [
+    "chat",
+    "forty",
+    "two"
+  ],
+  "author": "saksoy, rdeyirme, aabduvak, mkaramuk",
+  "license": "GPL-3.0",
+  "bugs": {
+    "url": "https://github.com/TalhaAksoy/chat42/issues"
+  },
+  "homepage": "https://github.com/TalhaAksoy/chat42#readme",
+  "dependencies": {
+    "axios": "^0.25.0",
+    "body-parser": "^1.19.1",
+    "colors": "^1.4.0",
+    "express": "^4.17.2",
+    "express-session": "^1.17.2",
+    "pg": "^8.7.3"
+  }
+}
