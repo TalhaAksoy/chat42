@@ -17,7 +17,7 @@
 const axios = require('axios');
 const Token = require('./token');
 
-export default class Api42
+class Api42
 {
 	constructor(code = '')
 	{
@@ -31,5 +31,10 @@ export default class Api42
 			`access_code=${this.token}`,
 			`token_type=bearer`
 		];
+
+		const data = (await axios.get(`https://api.intra.42.fr/v2/?${encodeURIComponent(args.join('&'))`))
+		d
 	}
 }
+
+module.exports = Api42;

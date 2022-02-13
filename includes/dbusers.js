@@ -19,5 +19,4 @@ const DBConnection	= require('./dbconnection');
 
 class DBUser extends DBConnection
 {
-	
 }
