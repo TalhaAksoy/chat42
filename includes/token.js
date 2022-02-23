@@ -48,7 +48,6 @@ class Token
 		//log(args.join('&'));
 		const data		= (await axios.post(`https://api.intra.42.fr/oauth/token?${args.join('&')}`)).data;
 		this.token = data['access_token'];
-		log(this.token);
 		return (this.token);
 	}
 }

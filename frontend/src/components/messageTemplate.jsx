@@ -1,13 +1,8 @@
 import { Component } from 'react';
+import 					'bootstrap/dist/css/bootstrap.css';
 
 export default class MessageTemplate extends Component
 {
-	//
-	/*constructor(props)
-	{
-		super(props);
-	}*/
-
 	render()
 	{
 		return (

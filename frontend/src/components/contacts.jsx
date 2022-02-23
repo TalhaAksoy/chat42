@@ -19,7 +19,7 @@ import React, { Component }	from "react";
 import Carousel				from "react-multi-carousel";
 import $					from "jquery";
 import styles				from "../styles/contacts.module.css";
-import "react-multi-carousel/lib/styles.css";
+import						"react-multi-carousel/lib/styles.css";
 
 const responsive = {
   desktop: {
@@ -63,9 +63,10 @@ export default class Contacts extends Component
 			id = id - 2;
 		this.Carousel.goToSlide(id + 10);
 	}
+	
 	async componentDidMount()
 	{
-		await this.setState({
+		this.setState({
 			contacts: (await (await fetch('/getusers')).json())
 		}); 
 	}

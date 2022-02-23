@@ -1,7 +1,10 @@
+/* 
+ Talwind kullanacağınız her
+ css dosyasında bu satırları dahil edin
+*/
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
 /* Light Theme Start */
 /* Sağ taraf başlangıç*/
 .theme-Light > .rightBar /*Sağdaki Div*/

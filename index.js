@@ -14,15 +14,7 @@
  *	You should have received a copy of the GNU General Public License
  *	along with this program.  If not, see <https://www.gnu.org/licenses/>.	
 */
-const express				= require('express');
-const MainRouter			= require('./includes/routers/mainrouter');
-const AuthRouter			= require('./includes/routers/authrouter');
-const app 					= express();
-const port					= 5000
 
-const mr = new MainRouter();
-const ar = new AuthRouter();
-
-app.use(ar.router);
-app.use(mr.router);
-app.listen(port, () => console.log(`Server is running on ${port}`));
+const BackendServer = require('./includes/backendserver');
+const server		= new BackendServer();
+server.start();

@@ -29,24 +29,32 @@ class DBUser extends DBConnection
 		return (await (this.queryByColumn('users', '*', username, 'username')))[0];
 	}
 
-	async setUser(obj)
+	async setUser(username, obj)
 	{
-		try
+		if ((await this.getUser(username)))
 		{
-			var query = {
-				text: "UPDATE users SET username = $1, roles = $2, pp = $3, fullname = $4 WHERE username = $1",
-				values: [obj.username, obj.roles, obj.pp, obj.fullname]
-			};
-
-
+			var data = [
+				{
+					colName: 'username',
+					colValue: obj.username
+				},
+				{
+					colName: 'roles',
+					colValue: obj.roles
+				},
+				{
+					colName: 'pp',
+					colValue: obj.pp
+				},
+				{
+					colName: 'fullname',
+					colValue: obj.fullname
+				}
+			];
+			return (await this.updateQuery('users', data, username, 'username'));
 		}
-		catch
-		{
-			var query = {
-				text: "INSERT INTO users(username, roles, pp, fullname) VALUES ($1, $2, $3, $4)",
-				values: [obj.username, obj.roles, obj.pp, obj.fullname]
-			};
-			
-		}
+		return (await this.insertQuery('users', 
+										['username', 'roles', 'pp', 'fullname'],
+										[obj.username, obj.roles, obj.pp, obj.fullname]));
 	}
 }

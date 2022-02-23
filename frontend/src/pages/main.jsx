@@ -4,13 +4,11 @@ import { FontAwesomeIcon }						from '@fortawesome/react-fontawesome';
 import Contacts 								from '../components/contacts';
 import MessageTemplate							from '../components/messageTemplate';
 import ChannelTemplate 							from "../components/channelTemplate";	
-import axios									from "axios";
-import sio										from 'socket.io-client';
-import 'react-multi-carousel/lib/styles.css';
-import 'bootstrap/dist/css/bootstrap.css';
-import '../styles/index.module.css';
+import											'react-multi-carousel/lib/styles.css';
+import 											'bootstrap/dist/css/bootstrap.css';
+import 											'../styles/main.css';
 
-export default class Index extends Component
+export default class Main extends Component
 {
 	constructor(props)
 	{
@@ -21,15 +19,8 @@ export default class Index extends Component
 	async componentDidMount()
 	{
 		document.body.style.backgroundImage = "url('https://signin.intra.42.fr/assets/background_login-a4e0666f73c02f025f590b474b394fd86e1cae20e95261a6e4862c2d0faa1b04.jpg')";
-		this.socket = sio();
-		this.socket.connect();
-		this.sid = (await axios.post('/si')).data;
 	}
 
-	sendMessage(text)
-	{
-		this.socket.emit('message', { msg: text, sid: this.sid });
-	}
 	handleKeyPress(event)
 	{
 		if (event.key === 'Enter')
@@ -41,7 +32,6 @@ export default class Index extends Component
 	handleSubmit(event)
 	{
 		var textArea = document.querySelector(".text-area");
-		this.sendMessage(textArea.value);
 		var messages = this.state.messages;
 		messages.push(<MessageTemplate content={ textArea.value } profilephoto = {"https://avatars.githubusercontent.com/u/25377153?v=4"}/>);
 		this.setState({
@@ -61,41 +51,9 @@ export default class Index extends Component
 								<path d="m24 12.42-4.428 4.415H24zm-4.428-4.417-4.414 4.418v4.414h4.414V12.42L24 8.003V3.575h-4.428zm-4.414 0 4.414-4.428h-4.414zM0 15.996h8.842v4.43h4.412V12.42H4.428l8.826-8.846H8.842L0 12.421z" />
 							</svg>
 						</div>
-						<span class = "text-white font-bold">Chat</span>
+						<span className = "text-white font-bold">Chat</span>
 					</div>
 					<div className="channel bg-gray-800 grow border-solid border-1 hover:overflow-y-auto">
-						<ChannelTemplate channelName = "Hello World! :D"></ChannelTemplate>
-						<ChannelTemplate channelName = "Hello World! :D"></ChannelTemplate>
-						<ChannelTemplate channelName = "Hello World! :D"></ChannelTemplate>
-						<ChannelTemplate channelName = "Hello World! :D"></ChannelTemplate>
-						<ChannelTemplate channelName = "Hello World! :D"></ChannelTemplate>
-						<ChannelTemplate channelName = "Hello World! :D"></ChannelTemplate>
-						<ChannelTemplate channelName = "Hello World! :D"></ChannelTemplate>
-						<ChannelTemplate channelName = "Hello World! :D"></ChannelTemplate>
-						<ChannelTemplate channelName = "Hello World! :D"></ChannelTemplate>
-						<ChannelTemplate channelName = "Hello World! :D"></ChannelTemplate>
-						<ChannelTemplate channelName = "Hello World! :D"></ChannelTemplate>
-						<ChannelTemplate channelName = "Hello World! :D"></ChannelTemplate>
-						<ChannelTemplate channelName = "Hello World! :D"></ChannelTemplate>
-						<ChannelTemplate channelName = "Hello World! :D"></ChannelTemplate>
-						<ChannelTemplate channelName = "Hello World! :D"></ChannelTemplate>
-						<ChannelTemplate channelName = "Hello World! :D"></ChannelTemplate>
-						<ChannelTemplate channelName = "Hello World! :D"></ChannelTemplate>
-						<ChannelTemplate channelName = "Hello World! :D"></ChannelTemplate>
-						<ChannelTemplate channelName = "Hello World! :D"></ChannelTemplate>
-						<ChannelTemplate channelName = "Hello World! :D"></ChannelTemplate>
-						<ChannelTemplate channelName = "Hello World! :D"></ChannelTemplate>
-						<ChannelTemplate channelName = "Hello World! :D"></ChannelTemplate>
-						<ChannelTemplate channelName = "Hello World! :D"></ChannelTemplate>
-						<ChannelTemplate channelName = "Hello World! :D"></ChannelTemplate>
-						<ChannelTemplate channelName = "Hello World! :D"></ChannelTemplate>
-						<ChannelTemplate channelName = "Hello World! :D"></ChannelTemplate>
-						<ChannelTemplate channelName = "Hello World! :D"></ChannelTemplate>
-						<ChannelTemplate channelName = "Hello World! :D"></ChannelTemplate>
-						<ChannelTemplate channelName = "Hello World! :D"></ChannelTemplate>
-						<ChannelTemplate channelName = "Hello World! :D"></ChannelTemplate>
-						<ChannelTemplate channelName = "Hello World! :D"></ChannelTemplate>
-						<ChannelTemplate channelName = "Hello World! :D"></ChannelTemplate>
 						<ChannelTemplate channelName = "Hello World! :D"></ChannelTemplate>
 						<ChannelTemplate channelName = "Hello World! :D"></ChannelTemplate>
 					</div>

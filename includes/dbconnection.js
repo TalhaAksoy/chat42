@@ -37,19 +37,49 @@ class DBConnection
 		await this.conn.connect();
 	}
 	
-	async queryByColumn(table, cols=undefined, id=undefined, idcol=undefined, ordercol=undefined, orderby=undefined)
+	async queryByColumn(table, cols=undefined, id=undefined, idCol=undefined, ordercol=undefined, orderby=undefined)
 	{
-		if (cols == '*') cols = undefined;
+		if (cols == '*')
+			cols = undefined;
 		var query = {
 			text: `SELECT ${cols ? cols.join(',') : '*'} FROM ${table}`,
-			values: id ? [id] : []
+			values: []
 		};
 		
-		if(id)
-			query.text += ` WHERE ${idcol} = \$1`;
+		if(id && idCol)
+			query.text += ` WHERE ${idCol} = ${idCol}`;
 		if(ordercol && orderby)
 			query.text += `ORDER BY ${ordercol} ${orderby}`;
 		return (await this.conn.query(query)).rows;
+	}
+
+	async updateQuery(table, data, id=undefined, idCol=undefined)
+	{
+		var query = {
+			text: `UPDATE ${table} SET`,
+			values: []
+		};
+
+		for(var i = 0; i < data.length; i++)
+		{
+			query.text += `${data[i].colName} = $${i + 1}`;
+			if (i != data.length - 1)
+				query.text += ', ';
+			query.values.push(data[i].colValue);
+		}
+		if (id && idCol)
+			query.text += ` WHERE ${id} = ${idCol}`;
+		return (await this.query(query));
+	}
+
+	async insertQuery(table, cols, data)
+	{
+		var count = data.map((x, i) => '$' + i);
+		var query = {
+			text: `INSERT INTO ${table}(${cols.join(', ')}) VALUES (${count.join(', ')})`,
+			value: data
+		}
+		return (await this.query(query));
 	}
 
 	async query(query)

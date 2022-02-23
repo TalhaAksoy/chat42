@@ -28,13 +28,16 @@ class Api42
 	async callApi(code, endpoint)
 	{
 		var token = (await (new Token({code: code}).getToken()));
-		const args = 
-		[
-			`access_code=${token}`,
-			`token_type=bearer`
-		];
-		log(args.join('&'));
-		const data = (await axios.get(`https://api.intra.42.fr/v2/${endpoint}/?${args.join('&')}`)).data;
+		const args = {
+			'access_code': token,
+			'token_type': 'bearer'
+		};
+		const data = (await axios.get(`https://api.intra.42.fr/v2/${endpoint}`, {
+			headers: {
+				'Authorization': `Bearer ${token}`
+			}
+		})).data;
+		console.log(data);
 		return (data);
 	}
 }
