@@ -1,6 +1,7 @@
 import { Component } from "react";
 import { faArrowRight, faArrowUp, faPlus } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import io from 'socket.io-client';
 
 // Component import
 import MessageTemplate from '../components/messageTemplate';
@@ -10,10 +11,15 @@ import ChannelTemplate from "../components/channelTemplate";
 import 'react-multi-carousel/lib/styles.css';
 import 'bootstrap/dist/css/bootstrap.css';
 import '../styles/main.css';
+import axios from "axios";
 
 export default class Main extends Component {
 	constructor(props) {
 		super(props);
+
+		this.socket = io();
+		this.socket.on('emitmessage', (username, message) => this.onEmitMessageHandler(username, message));
+		this.socket.on('errormessage', (errMsg) => console.log(errMsg));
 		this.state = { 
 			messages: [],
 		};
@@ -21,14 +27,25 @@ export default class Main extends Component {
 
 	async componentDidMount() {
 		document.body.style.backgroundImage = "url('https://signin.intra.42.fr/assets/background_login-a4e0666f73c02f025f590b474b394fd86e1cae20e95261a6e4862c2d0faa1b04.jpg')";
-		this.sessionId = "";
+		this.sessionId = (await axios.post('/si')).data;
+		console.log(this.sessionId);
 	}
 
-	keyPressedHandler(event) {
+	onEmitMessageHandler(username, message)
+	{
+		this.addMessage(username + ' ' + message, '');
+	}
+
+	sendMessage(msg, pp)
+	{
+		this.socket.emit('sendmessage', msg, this.sessionId);
+	}
+
+	keyPressedHandler(event)
+	{
 		if (event.key === 'Enter') {
 			event.preventDefault();
-			let msg = this.popMessage();
-			this.addMessage(msg, "https://avatars.githubusercontent.com/u/25377153?v=4");
+			this.sendMessage(this.popMessage(), "https://avatars.githubusercontent.com/u/25377153?v=4");
 		}
 	}
 
@@ -49,12 +66,11 @@ export default class Main extends Component {
 
 	addMessage(msg, pp)
 	{
-		var messages = this.state.messages;
-		messages.push(<MessageTemplate content={ msg } profilephoto={ pp } key={messages.length}/> );
-		this.setState({
-			messages: messages
-		});
-		if (msg) {
+		if (msg)
+		{
+			var messages = this.state.messages;
+			messages.push(<MessageTemplate content={ msg } profilephoto={ pp } key={messages.length}/> );
+			this.setState({ messages: messages });
 			setTimeout(this.scrollDown, 300)
 		}
 	}

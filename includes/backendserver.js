@@ -49,24 +49,17 @@ class BackendServer
 		});
 
 		// GET
-		this.app.get('/lu', async (req, res) => await this.logUser(req, res));
-		this.app.get('/userinfo', (req, res) => this.userInfo(req, res));
+		this.app.get('/lu', async (req, res) => await this.logUserRoute(req, res));
+		this.app.get('/userinfo', (req, res) => this.userInfoRoute(req, res));
 		this.app.get('/il', (req, res) => this.isLoggedRoute(req, res));
 
 		// POST
-		this.app.post('/si', (req, res) => this.sendSessionId(req, res));
+		this.app.post('/si', (req, res) => this.getSessionIdRoute(req, res));
 
-		// TEST
-		this.app.get('/getusers', async (req, res) => {
-				res.json(['mkaramuk', "saksoy", "rdeyirme", "aabduvak", "aergul", "egun", "fbulut"]);
-		});
 		this.app.get('*', (req, res) => res.sendFile(path.join(__dirname, '../frontend/build/index.html')));
-		
-		// SOCKET.IO
-		this.sio.on('connection', (socket) =>
-		{
-			socket.on("onmessage", (data) => this.onMessageSend(data, socket));
-		});
+
+		// SOCKET
+		this.sio.on('connection', (socket) => this.onConnectionHandler(socket));
 	}
 
 	start()
@@ -74,12 +67,29 @@ class BackendServer
 		this.server.listen(port, () => console.log(`Server is running on ${port}`));
 	}
 
-	onMessageSend(data, sock)
+	onNewMessageHandler(message, sessionId, socket)
 	{
-		this.sio.emit()
+		if (this.isLogged(sessionId))
+		{
+			this.sio.emit('emitmessage', this.getUser(sessionId).login, message);			
+		}
+		else
+		{
+			socket.emit('errormessage', "You aren't logged in");
+		}
 	}
 
-	sendSessionId(req, res)
+	getUser(sessionId)
+	{
+		return JSON.parse(this.sessionStore.sessions[sessionId]).user;
+	}
+
+	onConnectionHandler(socket)
+	{
+		socket.on('sendmessage', (message, sessionId) => this.onNewMessageHandler(message, sessionId, socket));
+	}
+
+	getSessionIdRoute(req, res)
 	{
 		if (req.isLogged())
 			res.send(req.session.id);
@@ -87,7 +97,7 @@ class BackendServer
 			res.send("");
 	}
 
-	userInfo(req, res)
+	userInfoRoute(req, res)
 	{
 		if(req.isLogged())
 		{
@@ -102,7 +112,7 @@ class BackendServer
 		res.send(req.isLogged());
 	}
 
-	async logUser(req, res)
+	async logUserRoute(req, res)
 	{
 		
 		if (req.isLogged())

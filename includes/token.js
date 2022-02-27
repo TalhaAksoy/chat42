@@ -15,7 +15,6 @@
  *	along with this program.  If not, see <https://www.gnu.org/licenses/>.	
 */
 const axios		= require('axios');
-const { log }	= require('./logger');
 
 class Token
 {

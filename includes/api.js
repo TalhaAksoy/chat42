@@ -37,7 +37,6 @@ class Api42
 				'Authorization': `Bearer ${token}`
 			}
 		})).data;
-		console.log(data);
 		return (data);
 	}
 }
