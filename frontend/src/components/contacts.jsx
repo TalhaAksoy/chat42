@@ -41,11 +41,6 @@ const responsive = {
 
 export default class Contacts extends Component
 {
-	constructor(props)
-	{
-		super(props);
-		this.state = { contacts: [] };
-	}
 	isActive(slideid)
 	{
 		var i = 0;
@@ -62,13 +57,6 @@ export default class Contacts extends Component
 		else
 			id = id - 2;
 		this.Carousel.goToSlide(id + 10);
-	}
-	
-	async componentDidMount()
-	{
-		this.setState({
-			contacts: (await (await fetch('/getusers')).json())
-		}); 
 	}
 
 	render()
@@ -91,9 +79,7 @@ export default class Contacts extends Component
 				focusOnSelect={true}
 			>
 				{
-					this.state.contacts.map((contact,id) => {
-						return (<div key={id} className={styles['slide']} id={"slide" + id} onClick={(s) => {this.isActive(s.target); this.middle(id)}}>{ contact }</div>);
-					})
+					
 				}
 			</Carousel>
 		);

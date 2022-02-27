@@ -15,7 +15,7 @@ export default class MessageTemplate extends Component
 							</span>
 						</div>
 					</div>
-					<img src={this.props.profilephoto} alt="My profile" className="w-10 h-10 rounded-full order-1" />				
+					<img src={ this.props.profilephoto } alt="My profile" className="w-10 h-10 rounded-full order-1" />				
 				</div>
 			</div>
 		);

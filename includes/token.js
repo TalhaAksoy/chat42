@@ -24,7 +24,6 @@ class Token
 		this.uid = 'a8c2bf8266a4802fbc28168b2b7b28fa3ff4f753ff22b39b49ad23920618a255';
 		this.secret = '9c69161d797d1b7b07ab21a99630870cb4d8efcf26d29778c2c226757fc5e6a9';
 		this.redirect = 'http%3A%2F%2Flocalhost%3A5000%2Flu'
-		
 		this.code = code;
 		this.token = ''
 	}
@@ -45,7 +44,6 @@ class Token
 		else 
 			throw Error('Couldn\'t get code for generating token.');
 		
-		//log(args.join('&'));
 		const data		= (await axios.post(`https://api.intra.42.fr/oauth/token?${args.join('&')}`)).data;
 		this.token = data['access_token'];
 		return (this.token);

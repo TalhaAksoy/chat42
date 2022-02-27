@@ -18,6 +18,8 @@
 const session				= require('express-session');
 const bodyParser			= require('body-parser');
 const express				= require('express');
+const io					= require('socket.io');
+const http					= require('http');
 const path					= require('path');
 const Api42					= require('./api');
 const { log, error }		= require('./logger');
@@ -29,6 +31,8 @@ class BackendServer
 	{
 		this.sessionStore = new session.MemoryStore();
 		this.app = express();
+		this.server = http.createServer(this.app);
+		this.sio = io(this.server);
 		this.app.use(bodyParser.urlencoded({ extended: true }));
 		this.app.use(bodyParser.json());
 		this.app.use(express.static(path.join(__dirname, '../frontend/build')));
@@ -46,21 +50,44 @@ class BackendServer
 
 		// GET
 		this.app.get('/lu', async (req, res) => await this.logUser(req, res));
-		this.app.get('/userinfo', async (req, res) => await this.userInfo(req, res));
-		this.app.get('/il', async (req, res) => await this.isLoggedRoute(req, res));
+		this.app.get('/userinfo', (req, res) => this.userInfo(req, res));
+		this.app.get('/il', (req, res) => this.isLoggedRoute(req, res));
+
+		// POST
+		this.app.post('/si', (req, res) => this.sendSessionId(req, res));
+
 		// TEST
 		this.app.get('/getusers', async (req, res) => {
 				res.json(['mkaramuk', "saksoy", "rdeyirme", "aabduvak", "aergul", "egun", "fbulut"]);
 		});
 		this.app.get('*', (req, res) => res.sendFile(path.join(__dirname, '../frontend/build/index.html')));
+		
+		// SOCKET.IO
+		this.sio.on('connection', (socket) =>
+		{
+			socket.on("onmessage", (data) => this.onMessageSend(data, socket));
+		});
 	}
 
 	start()
 	{
-		this.app.listen(port, () => console.log(`Server is running on ${port}`));
+		this.server.listen(port, () => console.log(`Server is running on ${port}`));
 	}
 
-	async userInfo(req, res)
+	onMessageSend(data, sock)
+	{
+		this.sio.emit()
+	}
+
+	sendSessionId(req, res)
+	{
+		if (req.isLogged())
+			res.send(req.session.id);
+		else
+			res.send("");
+	}
+
+	userInfo(req, res)
 	{
 		if(req.isLogged())
 		{
@@ -70,7 +97,7 @@ class BackendServer
 		res.send(false);
 	}
 
-	async isLoggedRoute(req, res)
+	isLoggedRoute(req, res)
 	{
 		res.send(req.isLogged());
 	}
