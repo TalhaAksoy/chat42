@@ -2,10 +2,12 @@ import { Component } from "react";
 import { faArrowRight, faArrowUp, faPlus } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import io from 'socket.io-client';
+import $ from 'jquery';
 
 // Component import
 import MessageTemplate from '../components/messageTemplate';
 import ChannelTemplate from "../components/channelTemplate";
+import ProfileTemplate from "../components/profileTemplate";
 
 // CSS import
 import 'react-multi-carousel/lib/styles.css';
@@ -14,7 +16,8 @@ import '../styles/main.css';
 import axios from "axios";
 
 export default class Main extends Component {
-	constructor(props) {
+	constructor(props)
+	{
 		super(props);
 
 		this.socket = io();
@@ -25,10 +28,11 @@ export default class Main extends Component {
 		};
 	}
 
-	async componentDidMount() {
+	async componentDidMount()
+	{
 		document.body.style.backgroundImage = "url('https://signin.intra.42.fr/assets/background_login-a4e0666f73c02f025f590b474b394fd86e1cae20e95261a6e4862c2d0faa1b04.jpg')";
 		this.sessionId = (await axios.post('/si')).data;
-		console.log(this.sessionId);
+
 	}
 
 	onEmitMessageHandler(username, message)
@@ -43,7 +47,8 @@ export default class Main extends Component {
 
 	keyPressedHandler(event)
 	{
-		if (event.key === 'Enter') {
+		if (event.key === 'Enter')
+		{
 			event.preventDefault();
 			this.sendMessage(this.popMessage(), "https://avatars.githubusercontent.com/u/25377153?v=4");
 		}
@@ -75,15 +80,23 @@ export default class Main extends Component {
 		}
 	}
 
-	onClickButton() {
-		console.log("s")
-		let msg = this.popMessage();
-		this.addMessage(msg, "https://avatars.githubusercontent.com/u/25377153?v=4");
+	onClickButtonProfile(e)
+	{
+		$('#profileTemplate').slideToggle();
 	}
 
-	render() {
+	onClickButton()
+	{
+		this.addMessage(this.popMessage(), "https://avatars.githubusercontent.com/u/25377153?v=4");
+	}
+
+	render()
+	{
 		return (
-			<div className={`theme-${this.themeName} theme-Light h-screen overflow-hidden flex flex-row main-div`}>
+			<div style={{ position: 'relative' }} className={`theme-${this.themeName} theme-Light h-screen overflow-hidden flex flex-row main-div`}>
+				<div id="profileTemplate" style={{ display: 'none', position: 'absolute' , top : '50%', left: '50%', transform: 'translate(-50%, -50%)'}} className = "w-full h-full bg-gray-900 bg-opacity-25">
+					<ProfileTemplate onButtonHandler={(e) => $('#profileTemplate').slideToggle()}/>
+				</div>
 				<div className="rightBar flex flex-col w-1/6">
 					<div id="logo" className="logo bg-gray-800 border-solid border-1 py-2 flex flex-row justify-center items-center h-1/12">
 						<div className="text-white">
@@ -120,7 +133,7 @@ export default class Main extends Component {
 							<textarea onKeyPress={(e) => this.keyPressedHandler(e)} name="" id="" className="float-left w-10/12 rounded-none h-4/6 resize-none text-area p-2"></textarea>
 							<button onClick={(e) => this.onClickButton()} className="bg-gray-300 w-2/12 h-4/6 message-send-button rounded-r-lg"><span className="text-white font-bold">Gönder</span><span> <FontAwesomeIcon className="text-white" icon={faArrowRight} /> </span></button>
 							<div className="profile-button w-full h-2/6 text-center">
-								<button className="bg-gray-600 w-full h-full"><span className="text-white"><FontAwesomeIcon className="text-white" icon={faArrowUp} /></span></button>
+								<button onClick={(e) => this.onClickButtonProfile(e)} className="bg-gray-600 w-full h-full"><span className="text-white"><FontAwesomeIcon className="text-white" icon={faArrowUp} /></span></button>
 							</div>
 						</div>
 					</div>
