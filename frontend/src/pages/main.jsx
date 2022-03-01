@@ -8,6 +8,7 @@ import $ from 'jquery';
 import MessageTemplate from '../components/messageTemplate';
 import ChannelTemplate from "../components/channelTemplate";
 import ProfileTemplate from "../components/profileTemplate";
+import FTButton from "../components/ftbutton";
 
 // CSS import
 import 'react-multi-carousel/lib/styles.css';
@@ -80,11 +81,6 @@ export default class Main extends Component {
 		}
 	}
 
-	onClickButtonProfile(e)
-	{
-		$('#profileTemplate').slideToggle();
-	}
-
 	onClickButton()
 	{
 		this.addMessage(this.popMessage(), "https://avatars.githubusercontent.com/u/25377153?v=4");
@@ -94,7 +90,8 @@ export default class Main extends Component {
 	{
 		return (
 			<div style={{ position: 'relative' }} className={`theme-${this.themeName} theme-Light h-screen overflow-hidden flex flex-row main-div`}>
-				<div id="profileTemplate" style={{ display: 'none', position: 'absolute' , top : '50%', left: '50%', transform: 'translate(-50%, -50%)'}} className = "w-full h-full bg-gray-900 bg-opacity-25">
+				<div style={{ display: 'none' }} id="profileTemplate" >
+					<div onClick={(e) => $('#profileTemplate').slideToggle()} style={{ position: 'absolute' , top : '50%', left: '50%', transform: 'translate(-50%, -50%)'}} className = "w-full h-full bg-gray-900 bg-opacity-25" />
 					<ProfileTemplate onButtonHandler={(e) => $('#profileTemplate').slideToggle()}/>
 				</div>
 				<div className="rightBar flex flex-col w-1/6">
@@ -131,9 +128,23 @@ export default class Main extends Component {
 						</div>
 						<div className="message-type w-full h-1/6 float-left">
 							<textarea onKeyPress={(e) => this.keyPressedHandler(e)} name="" id="" className="float-left w-10/12 rounded-none h-4/6 resize-none text-area p-2"></textarea>
-							<button onClick={(e) => this.onClickButton()} className="bg-gray-300 w-2/12 h-4/6 message-send-button rounded-r-lg"><span className="text-white font-bold">Gönder</span><span> <FontAwesomeIcon className="text-white" icon={faArrowRight} /> </span></button>
+							
+							<FTButton className="w-2/12 h-4/6 message-send-button"
+										onClick={(e) => this.onClickButton()}
+										textColor="white"
+										icon={faArrowRight}
+										color="gray"
+										toneValue="400"
+										text="Gönder" />
+
+							
 							<div className="profile-button w-full h-2/6 text-center">
-								<button onClick={(e) => this.onClickButtonProfile(e)} className="bg-gray-600 w-full h-full"><span className="text-white"><FontAwesomeIcon className="text-white" icon={faArrowUp} /></span></button>
+								<FTButton className="w-full h-full"
+											onClick={(e) => $('#profileTemplate').slideToggle()}
+											textColor="white"
+											icon={faArrowUp}
+											color="green"
+											toneValue="500" />
 							</div>
 						</div>
 					</div>
