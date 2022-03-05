@@ -12,9 +12,16 @@
  *	GNU General Public License for more details.
  *
  *	You should have received a copy of the GNU General Public License
- *	along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ *	along with this program.  If not, see <https://www.gnu.org/licenses/>.	
 */
 
-//const BackendServer = require('./includes/backendserver');
-//const server		= new BackendServer();
-//server.start();
+const mongoose = require('mongoose');
+const Schema = mongoose.Schema;
+const messageSchema = new Schema({
+	owner: mongoose.Types.ObjectId,
+	sendtime: Date,
+	content: String,
+	receiver: String
+});
+
+module.exports = messageSchema;

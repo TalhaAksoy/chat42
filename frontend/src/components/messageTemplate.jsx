@@ -15,8 +15,8 @@ export default class MessageTemplate extends Component {
 							<div className='message-content'>
 								{this.props.content} 
 							</div>
-							<div className='message-time'>
-								<span className = "text-sm">{this.props.time}</span>
+							<div className='text-sm message-time'>
+								{this.props.time}
 							</div>
 						</span>
 					</div>

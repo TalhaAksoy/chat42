@@ -15,46 +15,22 @@
  *	along with this program.  If not, see <https://www.gnu.org/licenses/>.	
 */
 
-const DBConnection	= require('./dbconnection');
+const mongo			= require('mongoose');
+const userSchema	= require('./schemes/userSchema');
 
-class DBUser extends DBConnection
+class DBUser
 {
-	constructor(conn)
+	constructor()
 	{
-		super(conn);
+		this.model = mongo.model('users', userSchema);
 	}
 
 	async getUser(username)
 	{
-		return (await (this.queryByColumn('users', '*', username, 'username')))[0];
+		return (await this.model.find({ username }));
 	}
+}
 
-	async setUser(username, obj)
-	{
-		if ((await this.getUser(username)))
-		{
-			var data = [
-				{
-					colName: 'username',
-					colValue: obj.username
-				},
-				{
-					colName: 'roles',
-					colValue: obj.roles
-				},
-				{
-					colName: 'pp',
-					colValue: obj.pp
-				},
-				{
-					colName: 'fullname',
-					colValue: obj.fullname
-				}
-			];
-			return (await this.updateQuery('users', data, username, 'username'));
-		}
-		return (await this.insertQuery('users', 
-										['username', 'roles', 'pp', 'fullname'],
-										[obj.username, obj.roles, obj.pp, obj.fullname]));
-	}
+module.exports = {
+	DBUser
 }

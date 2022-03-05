@@ -12,9 +12,28 @@
  *	GNU General Public License for more details.
  *
  *	You should have received a copy of the GNU General Public License
- *	along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ *	along with this program.  If not, see <https://www.gnu.org/licenses/>.	
 */
 
-//const BackendServer = require('./includes/backendserver');
-//const server		= new BackendServer();
-//server.start();
+const mongo = require('mongoose');
+
+class DBConnection
+{
+	constructor()
+	{ }
+
+	async connect()
+	{
+		return (await mongo.connect('mongodb+srv://ftadmin:dev2002@cluster0.a40py.mongodb.net/test'));
+	}
+
+	async close()
+	{
+		return (await mongo.connection.close());
+	}
+}
+
+module.exports = {
+	DBConnection
+}
+
