@@ -70,6 +70,7 @@
 	height: 100%;
 	background-color: burlywood;
 }
+
 .message-view
 {
 	width:100%;
@@ -81,6 +82,15 @@
 	width:100%;
 	/* background-color: green; */
 }
+.message-user 
+{
+	font-weight: bold;
+}
+.message-time 
+{
+	font-size: 11px;
+	text-align: right;
+}
 .profile-settings-button
 {
 	width: 100%;
@@ -88,4 +98,9 @@
 	background-color: red;
 }
 /* Light Theme End*/
-
+div 
+{
+	-webkit-user-select: none; /* Safari */
+	-ms-user-select: none; /* IE 10 and IE 11 */
+	user-select: none; /* Standard syntax */
+}

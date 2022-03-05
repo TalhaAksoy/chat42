@@ -103,8 +103,7 @@ export default class Main extends Component {
 						</div>
 						<span className="text-white font-bold">Chat</span>
 					</div>
-					<div className="channel bg-gray-800 grow border-solid border-1 hover:overflow-y-auto">
-						<ChannelTemplate channelName="Hello Worl! :D"></ChannelTemplate>
+					<div className="channel bg-gray-800 grow border-solid hover:overflow-y-auto">
 						<ChannelTemplate channelName="Hello World! :D"></ChannelTemplate>
 					</div>
 				</div>
@@ -113,7 +112,7 @@ export default class Main extends Component {
 
 						<div className="nav-mid w-11/12 h-full">
 						</div>
-						<div className="nav-end bg-gray-300 w-1/12 h-full flex flex-row text-center justify-center items-center border-1">
+						<div className="nav-end bg-gray-300 w-1/12 h-full flex flex-row text-center justify-center items-center">
 							<div>
 								<FontAwesomeIcon className="text-white mt-4" icon={faPlus} />
 							</div>
@@ -122,9 +121,10 @@ export default class Main extends Component {
 
 
 					<div className="message-area bg-blue-600 w-full flex-1 flex flex-col grow h-10/12">
-						<div className="message-show bg-gray-800 w-full h-20 flex-auto grow overflow-y-auto" id="message-area">
+						<div className="message-show bg-gray-800 w-full h-20 flex-auto grow p-1 overflow-y-auto" id="message-area">
 							{/* <div className="message-show-2 bg-gray-800 w-full"></div>*/}
-							{this.state.messages} 
+							{this.state.messages}
+							<MessageTemplate content="hello world" time="23:30" profilephoto="https://avatars.githubusercontent.com/u/25377153?v=4"/>
 						</div>
 						<div className="message-type w-full h-1/6 float-left">
 							<textarea onKeyPress={(e) => this.keyPressedHandler(e)} name="" id="" className="float-left w-10/12 rounded-none h-4/6 resize-none text-area p-2"></textarea>
