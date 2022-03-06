@@ -16,19 +16,19 @@
 */
 
 const mongo			= require('mongoose');
-const messageSchema	= require('./schemas/messageSchema');
+const channelSchema	= require('./schemas/channelSchema');
 
-class DBMessages
+class DBChannels
 {
 	constructor()
 	{
-		this.model = mongo.model('message', messageSchema);
+		this.model = mongo.model('channel', channelSchema);
 	}
 
-	async getAllMessages()
+	async getAllChannels()
 	{
-		return (await this.model.find({}).populate('owner', 'receiver'));
+		return (await this.model.find({}));
 	}
 }
 
-module.exports = DBMessages;
+module.exports = DBChannels;

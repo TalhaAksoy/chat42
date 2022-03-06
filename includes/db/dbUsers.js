@@ -16,21 +16,22 @@
 */
 
 const mongo			= require('mongoose');
-const userSchema	= require('./schemes/userSchema');
+const userSchema	= require('./schemas/userSchema');
 
 class DBUser
 {
-	constructor()
-	{
-		this.model = mongo.model('users', userSchema);
+	constructor(model=undefined)
+	{ 
+		if (model)
+			this.model = model;
+		else
+			this.model = mongo.model('user', userSchema);;
 	}
 
 	async getUser(username)
 	{
-		return (await this.model.find({ username }));
+		return (await this.model.findOne({ username }));
 	}
 }
 
-module.exports = {
-	DBUser
-}
+module.exports = DBUser;

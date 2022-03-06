@@ -15,20 +15,19 @@
  *	along with this program.  If not, see <https://www.gnu.org/licenses/>.	
 */
 
-const mongo			= require('mongoose');
-const messageSchema	= require('./schemas/messageSchema');
-
-class DBMessages
-{
-	constructor()
-	{
-		this.model = mongo.model('message', messageSchema);
+const mongoose = require('mongoose');
+const Schema = mongoose.Schema;
+const messageSchema = new Schema({
+	owner: {
+		type: mongoose.Schema.Types.ObjectId,
+		ref: 'user'
+	},
+	sendtime: Date,
+	content: String,
+	receiver: {
+		type: mongoose.Schema.Types.ObjectId,
+		ref: 'channel'
 	}
+});
 
-	async getAllMessages()
-	{
-		return (await this.model.find({}).populate('owner', 'receiver'));
-	}
-}
-
-module.exports = DBMessages;
+module.exports = messageSchema;

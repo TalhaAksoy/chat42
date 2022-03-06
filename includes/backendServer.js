@@ -22,7 +22,9 @@ const io					= require('socket.io');
 const http					= require('http');
 const path					= require('path');
 const Api42					= require('./api');
+const DBMessages			= require('./db/dbMessages');
 const { log, error }		= require('./logger');
+const { connectDB, closeDB }= require('./db/dbConnection');
 const port					= 5000;
 
 class BackendServer
@@ -33,6 +35,8 @@ class BackendServer
 		this.app = express();
 		this.server = http.createServer(this.app);
 		this.sio = io(this.server);
+		this.dbMessages = new DBMessages();
+
 		this.app.use(bodyParser.urlencoded({ extended: true }));
 		this.app.use(bodyParser.json());
 		this.app.use(express.static(path.join(__dirname, '../frontend/build')));
@@ -55,7 +59,9 @@ class BackendServer
 
 		// POST
 		this.app.post('/si', (req, res) => this.getSessionIdRoute(req, res));
+		this.app.get('/gm', async (req, res) => await this.getMessagesRoute(req, res));
 
+		// Geri kalan kısım React'a gidiyor
 		this.app.get('*', (req, res) => res.sendFile(path.join(__dirname, '../frontend/build/index.html')));
 
 		// SOCKET
@@ -63,8 +69,14 @@ class BackendServer
 	}
 
 	start()
-	{
-		this.server.listen(port, () => console.log(`Server is running on ${port}`));
+	{	
+		this.server.listen(port, async () => 
+		{
+			log(`Server is running on ${port}`)
+			log('Connecting to the database...');
+			await connectDB();
+			log('Connected');
+		});
 	}
 
 	onNewMessageHandler(message, sessionId, socket)
@@ -95,6 +107,15 @@ class BackendServer
 			res.send(req.session.id);
 		else
 			res.send("");
+	}
+
+	async getMessagesRoute(req, res)
+	{
+		//if (req.isLogged())
+		{
+			log(await this.dbMessages.getAllMessages());
+			res.send(await this.dbMessages.getAllMessages());
+		}
 	}
 
 	userInfoRoute(req, res)

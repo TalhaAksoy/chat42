@@ -15,6 +15,25 @@
  *	along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-//const BackendServer = require('./includes/backendserver');
-//const server		= new BackendServer();
-//server.start();
+/* const BackendServer = require('./includes/backendServer');
+const server		= new BackendServer();
+server.start(); */
+
+const DBMessages					= require('./includes/db/dbMessages');
+const DBUser					= require('./includes/db/dbUsers');
+const DBChannels					= require('./includes/db/dbChannels');
+
+const { connectDB, closeDB }	= require('./includes/db/dbConnection');
+
+async function main()
+{
+	await connectDB()
+	var db = new DBMessages();
+	var ch = new DBChannels();
+	var usr = new DBUser();
+	console.log(await db.getAllMessages());
+
+	await closeDB();
+}
+
+main();

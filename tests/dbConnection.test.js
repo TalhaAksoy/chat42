@@ -12,23 +12,19 @@
  *	GNU General Public License for more details.
  *
  *	You should have received a copy of the GNU General Public License
- *	along with this program.  If not, see <https://www.gnu.org/licenses/>.	
+ *	along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-const mongo			= require('mongoose');
-const messageSchema	= require('./schemas/messageSchema');
+const { connectDB, closeDB }	= require('../includes/db/dbConnection');
 
-class DBMessages
+test('Veritabanına bağlan', async () => 
 {
-	constructor()
-	{
-		this.model = mongo.model('message', messageSchema);
-	}
+	await connectDB();
+});
 
-	async getAllMessages()
-	{
-		return (await this.model.find({}).populate('owner', 'receiver'));
-	}
-}
+test('Veritabanı bağlantısını kes', async () => 
+{
+	await closeDB();
+});
 
-module.exports = DBMessages;
+
