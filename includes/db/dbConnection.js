@@ -17,23 +17,17 @@
 
 const mongo = require('mongoose');
 
-class DBConnection
+async function connectDB()
 {
-	constructor()
-	{ }
+	return (await mongo.connect('mongodb+srv://ftadmin:dev2002@cluster0.a40py.mongodb.net/test'));
+}
 
-	async connect()
-	{
-		return (await mongo.connect('mongodb+srv://ftadmin:dev2002@cluster0.a40py.mongodb.net/test'));
-	}
-
-	async close()
-	{
-		return (await mongo.connection.close());
-	}
+async function closeDB()
+{
+	return (await mongo.connection.close());
 }
 
 module.exports = {
-	DBConnection
+	connectDB,
+	closeDB
 }
-
