@@ -22,23 +22,30 @@ export default class Main extends Component {
 		super(props);
 
 		this.socket = io();
-		this.socket.on('emitmessage', (username, message) => this.onEmitMessageHandler(username, message));
+		this.socket.on('emitmessage', (username, message, avatar) => this.onEmitMessageHandler(username, message, avatar));
 		this.socket.on('errormessage', (errMsg) => console.log(errMsg));
 		this.state = { 
 			messages: [],
 		};
 	}
 
+	async loadMessages()
+	{
+		var msgs =  (await axios.get('/gm')).data;
+		for (var i = 0; i < msgs.length; i++)
+			this.addMessage(msgs[i].content, msgs[i].owner.avatar, msgs[i].owner.fullname);
+	}
+
 	async componentDidMount()
 	{
 		document.body.style.backgroundImage = "url('https://signin.intra.42.fr/assets/background_login-a4e0666f73c02f025f590b474b394fd86e1cae20e95261a6e4862c2d0faa1b04.jpg')";
 		this.sessionId = (await axios.post('/si')).data;
-
+		await this.loadMessages();
 	}
 
-	onEmitMessageHandler(username, message)
+	onEmitMessageHandler(username, message, avatar)
 	{
-		this.addMessage(username + ' ' + message, '');
+		this.addMessage(message, avatar, username);
 	}
 
 	sendMessage(msg, pp)
@@ -70,12 +77,12 @@ export default class Main extends Component {
 		clearInterval(this.interval);
 	}
 
-	addMessage(msg, pp)
+	addMessage(msg, pp, username)
 	{
 		if (msg)
 		{
 			var messages = this.state.messages;
-			messages.push(<MessageTemplate content={ msg } profilephoto={ pp } key={messages.length}/> );
+			messages.push(<MessageTemplate username={username} content={msg} profilephoto={pp} key={messages.length}/> );
 			this.setState({ messages: messages });
 			setTimeout(this.scrollDown, 300)
 		}
@@ -124,7 +131,6 @@ export default class Main extends Component {
 						<div className="message-show bg-gray-800 w-full h-20 flex-auto grow p-1 overflow-y-auto" id="message-area">
 							{/* <div className="message-show-2 bg-gray-800 w-full"></div>*/}
 							{this.state.messages}
-							<MessageTemplate content="hello world" time="23:30" profilephoto="https://avatars.githubusercontent.com/u/25377153?v=4"/>
 						</div>
 						<div className="message-type w-full h-1/6 float-left">
 							<textarea onKeyPress={(e) => this.keyPressedHandler(e)} name="" id="" className="float-left w-10/12 rounded-none h-4/6 resize-none text-area p-2"></textarea>

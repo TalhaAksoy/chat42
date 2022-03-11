@@ -13,14 +13,14 @@ export default class App extends Component
 
 	async componentDidMount()
 	{
-		/* if (await isLogged()) */
+		if (await isLogged())
 			this.setState({
 				page: (<Main />)
 			});
-	/* 	else
+		else
 			this.setState({
 				page: (<Login />)
-			});		 */
+			});		
 	}
 
 	render()

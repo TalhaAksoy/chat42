@@ -15,13 +15,13 @@
  *	along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-/* const BackendServer = require('./includes/backendServer');
+const BackendServer = require('./includes/backendServer');
 const server		= new BackendServer();
-server.start(); */
+server.start();
 
-const DBMessages					= require('./includes/db/dbMessages');
+/* const DBMessages				= require('./includes/db/dbMessages');
 const DBUser					= require('./includes/db/dbUsers');
-const DBChannels					= require('./includes/db/dbChannels');
+const DBChannels				= require('./includes/db/dbChannels');
 
 const { connectDB, closeDB }	= require('./includes/db/dbConnection');
 
@@ -31,9 +31,9 @@ async function main()
 	var db = new DBMessages();
 	var ch = new DBChannels();
 	var usr = new DBUser();
-	console.log(await db.getAllMessages());
+	console.log(await db.getAllMessages(['username', 'fullname', 'avatar']));
 
-	await closeDB();
+	await closeDB(); 
 }
 
-main();
+main(); */

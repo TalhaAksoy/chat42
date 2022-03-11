@@ -23,6 +23,7 @@ const http					= require('http');
 const path					= require('path');
 const Api42					= require('./api');
 const DBMessages			= require('./db/dbMessages');
+const DBUsers				= require('./db/dbUsers');
 const { log, error }		= require('./logger');
 const { connectDB, closeDB }= require('./db/dbConnection');
 const port					= 5000;
@@ -35,6 +36,7 @@ class BackendServer
 		this.app = express();
 		this.server = http.createServer(this.app);
 		this.sio = io(this.server);
+		this.dbUsers = new DBUsers();
 		this.dbMessages = new DBMessages();
 
 		this.app.use(bodyParser.urlencoded({ extended: true }));
@@ -79,11 +81,17 @@ class BackendServer
 		});
 	}
 
-	onNewMessageHandler(message, sessionId, socket)
+	async onNewMessageHandler(message, sessionId, socket)
 	{
 		if (this.isLogged(sessionId))
 		{
-			this.sio.emit('emitmessage', this.getUser(sessionId).login, message);			
+			var user = await this.dbUsers.getUser(this.getUser(sessionId).login);
+			this.sio.emit('emitmessage', user.username, message, user.avatar);
+			this.dbMessages.saveMessage({
+				owner: user.id,
+				sendtime: Date.now(),
+				content: message
+			});
 		}
 		else
 		{
@@ -98,7 +106,7 @@ class BackendServer
 
 	onConnectionHandler(socket)
 	{
-		socket.on('sendmessage', (message, sessionId) => this.onNewMessageHandler(message, sessionId, socket));
+		socket.on('sendmessage', async (message, sessionId) => await this.onNewMessageHandler(message, sessionId, socket));
 	}
 
 	getSessionIdRoute(req, res)
@@ -111,11 +119,10 @@ class BackendServer
 
 	async getMessagesRoute(req, res)
 	{
-		//if (req.isLogged())
-		{
-			log(await this.dbMessages.getAllMessages());
-			res.send(await this.dbMessages.getAllMessages());
-		}
+	/* 	if (req.isLogged()) */
+			res.send(await this.dbMessages.getAllMessages(['username', 'fullname', 'avatar']));
+		/* else
+			res.send({}) */
 	}
 
 	userInfoRoute(req, res)

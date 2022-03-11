@@ -25,9 +25,15 @@ class DBMessages
 		this.model = mongo.model('message', messageSchema);
 	}
 
-	async getAllMessages()
+	async saveMessage(fields)
 	{
-		return (await this.model.find({}).populate('owner', 'receiver'));
+		var data = new this.model(fields);
+		return (await data.save());
+	}
+
+	async getAllMessages(fields)
+	{
+		return (await this.model.find({}).populate({ path: 'owner', select: fields }));
 	}
 }
 
