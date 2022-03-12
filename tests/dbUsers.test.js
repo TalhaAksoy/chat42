@@ -42,19 +42,6 @@ test('Veritabanına bağlan (DBUsers)', async () =>
 	await connectDB();
 });
 
-test('Kullanıcı bilgilerini çek', async () =>
-{
-	const data = await db.getUser('fbulut');
-	expect(data).toMatchObject({
-		_id: new mongo.Types.ObjectId("622388972047bed6762fda4d"),
-		username: 'fbulut',
-		avatar: 'https://avatars.githubusercontent.com/u/25377153?v=4',
-		fullname: 'Fatih Bulut',
-		role: [ 'admin', 'staff', 'student' ],
-		memberof: [ new mongo.Types.ObjectId("62238a1e2047bed6762fda64") ]
-	  });
-});
-
 test('Veritabanı bağlantısını kes (DBUsers)', async () => 
 {
 	await closeDB();

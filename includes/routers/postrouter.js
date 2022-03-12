@@ -15,14 +15,31 @@
  *	along with this program.  If not, see <https://www.gnu.org/licenses/>.	
 */
 
-// users koleksiyonu için veri alma ve kayıt etme şeması
-const mongoose = require('mongoose');
-const Schema = mongoose.Schema;
-const userSchema = new Schema({
-	username: String,
-	avatar: String,
-	fullname: String,
-	roles: [String],
-});
+const express				= require('express');
+const { log, error }		= require('../logger');
 
-module.exports = userSchema;
+class PostRouter
+{
+	// Post isteklerinde ihtiyaç olması durumunda BackendServer (server)
+	// nesnesi kullanılabilir.
+	constructor(server)
+	{
+		this.server = server;
+		this.router = express.Router();
+
+		this.router.post('/gm', async (req, res) => await this.getAllMessages(req, res));
+
+		// Router'ı server'a ekle.
+		this.server.app.use(this.router);
+	}
+
+	async getAllMessages(req, res)
+	{
+		if (req.isLogged())
+			res.send(await this.server.dbMessages.getAllMessages(['username', 'fullname', 'avatar']));
+		else
+			res.send({})
+	}
+}
+
+module.exports = PostRouter;

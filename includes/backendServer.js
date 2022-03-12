@@ -21,9 +21,10 @@ const express				= require('express');
 const io					= require('socket.io');
 const http					= require('http');
 const path					= require('path');
-const Api42					= require('./api');
 const DBMessages			= require('./db/dbMessages');
 const DBUsers				= require('./db/dbUsers');
+const GetRouter				= require('./routers/getrouter');
+const PostRouter			= require('./routers/postrouter');
 const { log, error }		= require('./logger');
 const { connectDB, closeDB }= require('./db/dbConnection');
 const port					= 5000;
@@ -44,25 +45,20 @@ class BackendServer
 		this.app.use(express.static(path.join(__dirname, '../frontend/build')));
 		this.app.use(session({
 			store: this.sessionStore,
-			secret: 'veryspecialkey',
+			secret: 'veryspecialkey', // TODO: bir şifre belirle
 			resave: false,
 			saveUninitialized: true
 		}));
 		this.app.use((req, res, next) =>
 		{
-			req.isLogged = function() { return this.session && this.session.user };
+			req.isLogged = function() { return (this.session && this.session.user) ? true : false };
 			next();
 		});
 
-		// GET
-		this.app.get('/lu', async (req, res) => await this.logUserRoute(req, res));
-		this.app.get('/userinfo', (req, res) => this.userInfoRoute(req, res));
-		this.app.get('/il', (req, res) => this.isLoggedRoute(req, res));
-
-		// POST
-		this.app.post('/si', (req, res) => this.getSessionIdRoute(req, res));
-		this.app.get('/gm', async (req, res) => await this.getMessagesRoute(req, res));
-
+		// GET API
+		this.getRouter = new GetRouter(this);
+		// POST API
+		this.postRouter = new PostRouter(this);
 		// Geri kalan kısım React'a gidiyor
 		this.app.get('*', (req, res) => res.sendFile(path.join(__dirname, '../frontend/build/index.html')));
 
@@ -70,6 +66,7 @@ class BackendServer
 		this.sio.on('connection', (socket) => this.onConnectionHandler(socket));
 	}
 
+	// Sunucuyu başlatır
 	start()
 	{	
 		this.server.listen(port, async () => 
@@ -81,81 +78,36 @@ class BackendServer
 		});
 	}
 
+	// İstemci tarafından soket kullanılarak bir mesaj gönderildiğinde çalışır
 	async onNewMessageHandler(message, sessionId, socket)
 	{
 		if (this.isLogged(sessionId))
 		{
-			var user = await this.dbUsers.getUser(this.getUser(sessionId).login);
-			this.sio.emit('emitmessage', user.username, message, user.avatar);
+			var user = this.getUser(sessionId);
+			this.sio.emit('emitmessage', user.username, message, user.avatar, Date.now());
 			this.dbMessages.saveMessage({
-				owner: user.id,
+				owner: user._id,
 				sendtime: Date.now(),
 				content: message
 			});
 		}
 		else
 		{
+			error(`User is not logged. Session ID: ${sessionId}`);
 			socket.emit('errormessage', "You aren't logged in");
 		}
 	}
 
+	// Session üzerine kayıt edilen kullanıcı bilgisini alır
 	getUser(sessionId)
 	{
 		return JSON.parse(this.sessionStore.sessions[sessionId]).user;
 	}
 
+	// Yeni bir soket bağlantısı gerçekleştiği zaman çalışır
 	onConnectionHandler(socket)
 	{
 		socket.on('sendmessage', async (message, sessionId) => await this.onNewMessageHandler(message, sessionId, socket));
-	}
-
-	getSessionIdRoute(req, res)
-	{
-		if (req.isLogged())
-			res.send(req.session.id);
-		else
-			res.send("");
-	}
-
-	async getMessagesRoute(req, res)
-	{
-	/* 	if (req.isLogged()) */
-			res.send(await this.dbMessages.getAllMessages(['username', 'fullname', 'avatar']));
-		/* else
-			res.send({}) */
-	}
-
-	userInfoRoute(req, res)
-	{
-		if(req.isLogged())
-		{
-			res.send(req.session.user);
-			return ;
-		}
-		res.send(false);
-	}
-
-	isLoggedRoute(req, res)
-	{
-		res.send(req.isLogged());
-	}
-
-	async logUserRoute(req, res)
-	{
-		
-		if (req.isLogged())
-			log(`User already logged: ${req.session.user.login}`);
-		else if (req.query && req.query.code)
-		{
-			try
-			{
-				let api = new Api42();
-				req.session.user = await api.callApi(req.query.code, '/me');
-			}
-			catch(e)
-			{ error(e); }
-		}
-		res.redirect('/');
 	}
 
 	isLogged(sessionId)

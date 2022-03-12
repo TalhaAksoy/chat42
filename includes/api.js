@@ -16,32 +16,20 @@
 */
 const axios = require('axios');
 const Token = require('./token');
-const { log } = require('./logger');
 
-class Api42
+async function callApi(code, endpoint)
 {
-	constructor()
-	{
-
-	}
-
-	async callApi(code, endpoint)
-	{
-		var token = (await (new Token({code: code}).getToken()));
-		const args = {
-			'access_code': token,
-			'token_type': 'bearer'
-		};
-		const data = (await axios.get(`https://api.intra.42.fr/v2/${endpoint}`, {
-			headers: {
-				'Authorization': `Bearer ${token}`
-			}
-		})).data;
-		return (data);
-	}
+	var token = (await (new Token({code: code}).getToken()));
+	const args = {
+		'access_code': token,
+		'token_type': 'bearer'
+	};
+	const data = (await axios.get(`https://api.intra.42.fr/v2/${endpoint}`, {
+		headers: {
+			'Authorization': `Bearer ${token}`
+		}
+	})).data;
+	return (data);
 }
 
-//UPDATE tablo_adi 
-//SET ContactName = 'Alfred Schmidt', City= 'Frankfurt' 
-//WHERE CustomerID = 1;
-module.exports = Api42;
+module.exports = callApi;

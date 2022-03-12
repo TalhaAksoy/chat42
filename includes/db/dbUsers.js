@@ -28,6 +28,12 @@ class DBUser
 			this.model = mongo.model('user', userSchema);;
 	}
 
+	async saveUser(fields)
+	{
+		var data = new this.model(fields);
+		return (await data.save());
+	}
+
 	async getUser(username)
 	{
 		return (await this.model.findOne({ username }));

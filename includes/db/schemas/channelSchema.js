@@ -15,6 +15,7 @@
  *	along with this program.  If not, see <https://www.gnu.org/licenses/>.	
 */
 
+// channels koleksiyonu için veri alma ve kayıt etme şeması
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 const channelSchema = new Schema({

@@ -4,11 +4,12 @@ import 'bootstrap/dist/css/bootstrap.css';
 
 export default function ProfileTemplate(props)
 {
+	var roles = props.roles ?? [];
 	return (
 		<div style={{ position: 'absolute' , top : '50%', left: '50%', transform: 'translate(-50%, -50%)'}} className="max-w-sm rounded overflow-y-scroll w-4/5 h-4/5 bg-white shadow-lg text-center">
-			<img className="w-full" src="https://avatars.githubusercontent.com/u/25377153?v=4" alt="Sunset in the mountains"></img>
+			<img className="w-full" src={props.avatar} alt="Sunset in the mountains"></img>
 				<div className="px-6 py-4">
-					<div className="font-bold text-xl mb-2">Login42 Proifl Bilgileri</div>
+					<div className="font-bold text-xl mb-2">Profil Bilgileri</div>
 					<table className = "border-1 w-full">
 						<tr>
 							<td className = "border-1 w-2/5">
@@ -18,19 +19,7 @@ export default function ProfileTemplate(props)
 							</td>
 							<td className = "border-1 w-3/5">
 								<span>
-									k.adi
-								</span>
-							</td>
-						</tr>
-						<tr>
-							<td className = "border-1 w-2/5">
-								<span className = "font-bold">
-									E-mail :
-								</span>
-							</td>
-							<td className = "border-1 w-3/5">
-								<span>
-									student@42istanbul.com.tr
+									{props.username}
 								</span>
 							</td>
 						</tr>
@@ -42,7 +31,7 @@ export default function ProfileTemplate(props)
 							</td>
 							<td className = "border-1 w-3/5">
 								<span>
-									Otostopçu
+									{roles.join(', ')}
 								</span>
 							</td>
 						</tr>

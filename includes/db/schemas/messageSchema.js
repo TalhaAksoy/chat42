@@ -15,6 +15,7 @@
  *	along with this program.  If not, see <https://www.gnu.org/licenses/>.	
 */
 
+// messages koleksiyonu için veri alma ve kayıt etme şeması
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 const messageSchema = new Schema({
@@ -24,10 +25,7 @@ const messageSchema = new Schema({
 	},
 	sendtime: Date,
 	content: String,
-	receiver: {
-		type: mongoose.Schema.Types.ObjectId,
-		ref: 'channel'
-	}
+	receiver: mongoose.Schema.Types.ObjectId
 });
 
 module.exports = messageSchema;

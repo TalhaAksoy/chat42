@@ -17,21 +17,20 @@
 
 const colors = require('colors');
 
-function message(msg, name=undefined, color='blue', type='LOG')
+function message(msg, color='blue', type='LOG')
 {
 	let head = `[${type}]: `[color];
-	name = name ? `{${name}} | ` : '';
-	console.log(head + name + msg);
+	console.log(head + msg);
 }
 
-function error(msg, name=undefined)
+function error(msg)
 {
-	message(msg, name, 'red', 'ERROR');
+	message(msg, 'red', 'ERROR');
 }
 
-function log(msg, name=undefined)
+function log(msg)
 {
-	message(msg, name, 'blue', 'LOG');
+	message(msg, 'blue', 'LOG');
 }
 
 module.exports = {
