@@ -5,13 +5,11 @@ import App								from './pages/app';
 import About							from './pages/about';
 import NotFound							from './pages/notfound';
 
-
 render(
 <BrowserRouter>
 	<Routes>
-		<Route path="*" element={ <NotFound /> }  />
-		<Route exact path="/" element={ <App /> } />
-		<Route exact path="/about" element={ <About /> } />
+		<Route exact path="/" 		element={ <App /> } />
+		<Route exact path="/about" 	element={ <About /> } />
 	  </Routes>
 </BrowserRouter>,
 document.getElementById('root'));

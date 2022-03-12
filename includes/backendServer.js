@@ -25,6 +25,7 @@ const DBMessages			= require('./db/dbMessages');
 const DBUsers				= require('./db/dbUsers');
 const GetRouter				= require('./routers/getrouter');
 const PostRouter			= require('./routers/postrouter');
+const SocketManager 		= require('./socketmanager');
 const { log, error }		= require('./logger');
 const { connectDB, closeDB }= require('./db/dbConnection');
 const port					= 5000;
@@ -61,9 +62,8 @@ class BackendServer
 		this.postRouter = new PostRouter(this);
 		// Geri kalan kısım React'a gidiyor
 		this.app.get('*', (req, res) => res.sendFile(path.join(__dirname, '../frontend/build/index.html')));
-
 		// SOCKET
-		this.sio.on('connection', (socket) => this.onConnectionHandler(socket));
+		this.socketManager = new SocketManager(this);
 	}
 
 	// Sunucuyu başlatır
@@ -78,36 +78,10 @@ class BackendServer
 		});
 	}
 
-	// İstemci tarafından soket kullanılarak bir mesaj gönderildiğinde çalışır
-	async onNewMessageHandler(message, sessionId, socket)
-	{
-		if (this.isLogged(sessionId))
-		{
-			var user = this.getUser(sessionId);
-			this.sio.emit('emitmessage', user.username, message, user.avatar, Date.now());
-			this.dbMessages.saveMessage({
-				owner: user._id,
-				sendtime: Date.now(),
-				content: message
-			});
-		}
-		else
-		{
-			error(`User is not logged. Session ID: ${sessionId}`);
-			socket.emit('errormessage', "You aren't logged in");
-		}
-	}
-
 	// Session üzerine kayıt edilen kullanıcı bilgisini alır
 	getUser(sessionId)
 	{
 		return JSON.parse(this.sessionStore.sessions[sessionId]).user;
-	}
-
-	// Yeni bir soket bağlantısı gerçekleştiği zaman çalışır
-	onConnectionHandler(socket)
-	{
-		socket.on('sendmessage', async (message, sessionId) => await this.onNewMessageHandler(message, sessionId, socket));
 	}
 
 	isLogged(sessionId)

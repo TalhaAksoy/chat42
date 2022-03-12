@@ -10,7 +10,7 @@ export default class MessageTemplate extends Component {
 					<div className="flex flex-row space-y-2 text-base max-w-xs mx-2 order-2 items-start">
 						<span className="px-3 py-2 rounded-lg inline-block bg-gray-500 text-white message-content">
 							<div className='message-user'>
-								{this.props.username}
+								{this.props.fullname}
 							</div>
 							<div className='message-content'>
 								{this.props.content} 

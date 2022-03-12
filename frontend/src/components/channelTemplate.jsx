@@ -1,12 +1,9 @@
 import { Component } from 'react';
 
-export default class ChannelTemplate extends Component {
-	//
-	/*constructor(props) {
-		super(props);
-	}*/
-
-	render() {
+export default class ChannelTemplate extends Component
+{
+	render()
+	{
 		return (
 			<div className="chat-message mb-0 mt-1 border-solid mb-2 bg-gray-600">
 				<div className="flex items-end">

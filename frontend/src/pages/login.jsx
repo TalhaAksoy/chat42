@@ -15,7 +15,6 @@ export default class Login extends Component
 		// Body üzerinde yapılacak stil 
 		// değişiklikleri bu şekilde yapılmalı.
 		document.body.style.backgroundImage = "url(\"https://signin.intra.42.fr/assets/background_login-a4e0666f73c02f025f590b474b394fd86e1cae20e95261a6e4862c2d0faa1b04.jpg\")";
-
 	}
 
 	render() 
@@ -25,15 +24,13 @@ export default class Login extends Component
 				<div className="row d-flex justify-content-center align-items-center">
 					<div className="col-12 d-flex justify-content-center align-items-center" style={{backgroundColor:"#e9ecef",height:"40vh", borderRadius:"10px"}}> 
 					<Form>
-						<div className='col-12 mt-3 mb-3 p-0 d-flex justify-content-center'>
-							<Image src="/img/logo.gif" className="img-fluid" width={"200px"} />
+						<div className='pt-2 col-12 mt-3 mb-3 p-0 d-flex justify-content-center'>
+							<Image src="/img/mainlogo.png" className="img-fluid" width={"200px"} />
 						</div>
-						<div className='col-12'>
-							<a href={ this.redirectUrl }>
-								<Button variant="primary" style={{borderRadius:"10px"}}>
-									Login With Intra (Intra İle Giriş Yap) :D
-								</Button>
-							</a>
+						<div className='px-6 pb-2 flex flex-col'>
+							<Button href={ this.redirectUrl } style={{borderRadius:"10px", marginBottom: "20px"}}>
+								Giriş Yap
+							</Button>
 						</div>
 					</Form>
 					</div>

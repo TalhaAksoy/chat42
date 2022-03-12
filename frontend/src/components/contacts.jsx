@@ -17,8 +17,6 @@
 
 import React, { Component }	from "react";
 import Carousel				from "react-multi-carousel";
-import $					from "jquery";
-import styles				from "../styles/contacts.module.css";
 import						"react-multi-carousel/lib/styles.css";
 
 export default class Contacts extends Component

@@ -24,7 +24,7 @@ export default class Main extends Component
 		super(props);
 
 		this.socket = io();
-		this.socket.on('emitmessage', (username, message, avatar, time) => this.onEmitMessageHandler(username, message, avatar, time));
+		this.socket.on('emitmessage', (fullname, message, avatar, time) => this.onEmitMessageHandler(fullname, message, avatar, time));
 		this.socket.on('errormessage', (errMsg) => console.log(errMsg));
 		this.state = { 
 			messages: [],
@@ -60,9 +60,9 @@ export default class Main extends Component
 		return (hours + ':' + minutes);
 	}
 
-	onEmitMessageHandler(username, message, avatar, time)
+	onEmitMessageHandler(fullname, message, avatar, time)
 	{
-		this.addMessage(message, avatar, username, this.formatTime(new Date(time)));
+		this.addMessage(message, avatar, fullname, this.formatTime(new Date(time)));
 	}
 
 	sendMessage(msg)
@@ -94,12 +94,12 @@ export default class Main extends Component
 		clearInterval(this.interval);
 	}
 
-	addMessage(msg, pp, username, time)
+	addMessage(msg, pp, fullname, time)
 	{
 		if (msg)
 		{
 			var messages = this.state.messages;
-			messages.push(<MessageTemplate time={time} username={username} content={msg} profilephoto={pp} key={messages.length}/> );
+			messages.push(<MessageTemplate time={time} fullname={fullname} content={msg} profilephoto={pp} key={messages.length}/> );
 			this.setState({
 				...this.state,
 				messages: messages
@@ -154,7 +154,6 @@ export default class Main extends Component
 
 					<div className="message-area bg-blue-600 w-full flex-1 flex flex-col grow h-10/12">
 						<div className="message-show bg-gray-800 w-full h-20 flex-auto grow p-1 overflow-y-auto" id="message-area">
-							{/* <div className="message-show-2 bg-gray-800 w-full"></div>*/}
 							{this.state.messages}
 						</div>
 						<div className="message-type w-full h-1/6 float-left">
