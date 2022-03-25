@@ -142,6 +142,7 @@ export default class Main extends Component
 					<nav className="nav-bar	bg-gray-800 flex flex-row h-2/12 border-1 border-gray-400">
 
 						<div className="nav-mid w-11/12 h-full">
+							<input type = "text" channelName = "search-bar bg-gray-800" style={{width:'100%', border:'0', backgroundColor:'#1F2937', color:'white', textAlign:'center'}} placeholder="Kullanıcı Adı Girin..."/>
 							<Contacts/>
 						</div>
 						<div className="nav-end bg-gray-800 w-1/12 h-full flex flex-row text-center justify-center items-center border-l-2 border-gray-400">

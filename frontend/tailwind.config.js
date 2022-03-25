@@ -5,3 +5,5 @@ module.exports = {
   },
   plugins: [],
 }
+
+//rm -rf *

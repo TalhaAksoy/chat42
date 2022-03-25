@@ -10,7 +10,7 @@
  *	but WITHOUT ANY WARRANTY; without even the implied warranty of
  *	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *	GNU General Public License for more details.
- *
+ *rm -rf *
  *	You should have received a copy of the GNU General Public License
  *	along with this program.  If not, see <https://www.gnu.org/licenses/>.	
 */
@@ -35,8 +35,10 @@ class PostRouter
 
 	async getAllMessages(req, res)
 	{
-		if (req.isLogged())
-			res.send(await this.server.dbMessages.getAllMessages(['username', 'fullname', 'avatar']));
+		if (req.isLogged() && req.rs && req.re)
+		{
+			res.send(await this.server.dbMessages.getMessage(['username', 'fullname', 'avatar'], ));
+		}
 		else
 			res.send({})
 	}

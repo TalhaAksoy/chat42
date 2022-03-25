@@ -75,16 +75,18 @@ class GetRouter
 						username: data.login,
 						avatar: data.image_url,
 						fullname: data.displayname,
-						roles: ['student']
+						roles:  ['student']
 					};
 
 					if (data['staff?'])
 						user.roles.push('staff');
 					if (data.login == 'mkaramuk' ||
-						data.login == 'saksoy')
+						data.login == 'saksoy' ||
+						data.login == 'aabduvak' ||
+						data.login == 'fbulut')
 						user.roles.push('admin');
 
-					req.session.user = await this.server.dbUsers.saveUser(user);
+					req.session.user = (await this.server.dbUsers.saveUser(user));
 				}
 			}
 			catch(e)

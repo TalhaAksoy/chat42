@@ -31,6 +31,16 @@ class DBMessages
 		return (await data.save());
 	}
 
+	async getMessage(fields, limitStart, limitEnd)
+	{
+		var ret = (await this.model.find({})
+		.populate({ path: 'owner', select: fields }))
+		.sort({sendtime: -1});
+
+		ret = ret
+		return (ret);
+	}
+
 	async getAllMessages(fields)
 	{
 		return (await this.model.find({}).populate({ path: 'owner', select: fields }));
