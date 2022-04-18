@@ -31,19 +31,16 @@ class DBMessages
 		return (await data.save());
 	}
 
-	async getMessage(fields, limitStart, limitEnd)
+	async getMessage(fields, start=undefined, end=undefined)
 	{
 		var ret = (await this.model.find({})
-		.populate({ path: 'owner', select: fields }))
-		.sort({sendtime: -1});
-
-		ret = ret
+		.sort({sendtime: -1})
+		.populate({ path: 'owner', select: fields }));
+		if (!start && end)
+			ret = ret.slice(end);
+		else if (start && end)
+			ret = ret.slice(start, end);
 		return (ret);
-	}
-
-	async getAllMessages(fields)
-	{
-		return (await this.model.find({}).populate({ path: 'owner', select: fields }));
 	}
 }
 
