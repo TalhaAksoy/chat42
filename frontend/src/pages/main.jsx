@@ -24,8 +24,8 @@ export default class Main extends Component
 		super(props);
 
 		this.socket = io();
-		this.socket.on('emitmessage', (fullname, message, avatar, time) => this.onEmitMessageHandler(fullname, message, avatar, time));
-		this.socket.on('errormessage', (errMsg) => console.log(errMsg));
+		this.socket.on('on-message-recieved', (fullname, message, avatar, time, channel) => this.onMessageRecieved(fullname, message, avatar, time, channel));
+		this.socket.on('on-error', (errMsg) => console.log(errMsg));
 		this.state = { 
 			messages: [],
 			userinfo: {}
@@ -60,14 +60,14 @@ export default class Main extends Component
 		return (hours + ':' + minutes);
 	}
 
-	onEmitMessageHandler(fullname, message, avatar, time)
+	onMessageRecieved(fullname, message, avatar, time, channel)
 	{
 		this.addMessage(message, avatar, fullname, this.formatTime(new Date(time)));
 	}
 
 	sendMessage(msg)
 	{
-		this.socket.emit('sendmessage', msg, this.sessionId);
+		this.socket.emit('on-message-send', msg, 'general', this.sessionId);
 	}
 
 	keyPressedHandler(event)

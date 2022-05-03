@@ -19,7 +19,7 @@ const mongo = require('mongoose');
 
 async function connectDB()
 {
-	return (await mongo.connect('mongodb+srv://ftadmin:dev2002@cluster0.a40py.mongodb.net/chat42'));
+	return (await mongo.connect('mongodb+srv://mkaramuk:devman2002@cluster.mud8e.mongodb.net/chat42'));
 }
 
 async function closeDB()

@@ -26,12 +26,13 @@ class SocketManager
 	}
 
 	// sendmessage event'i için tetiklenecek fonksyion
-	async onSendMessageHandler(message, sessionId, socket)
+	async onMessageSendHandler(message, socket, sessionId, channel)
 	{
+		log(channel);
 		if (this.server.isLogged(sessionId))
 		{
 			var user = this.server.getUser(sessionId);
-			this.server.sio.emit('emitmessage', user.fullname, message, user.avatar, Date.now());
+			this.server.sio.emit('on-message-recieved', user.fullname, message, user.avatar, Date.now());
 			this.server.dbMessages.saveMessage({
 				owner: user._id,
 				sendtime: Date.now(),
@@ -41,15 +42,22 @@ class SocketManager
 		else
 		{
 			error(`User is not logged. Session ID: ${sessionId}`);
-			socket.emit('errormessage', "You aren't logged in");
+			this.emitError(socket, "You aren't logged in");
 		}
+	}
+	
+	emitError(socket, message)
+	{
+		socket.emit('on-error', message);
 	}
 
 	// Yeni bir soket bağlantısı gerçekleştiği zaman çalışır
 	onSocketConnected(socket)
 	{
-		// Her soket için sendmessage event'ini bağla.
-		socket.on('sendmessage', async (msg, si) => await this.onSendMessageHandler(msg, si, socket));
+		// Soket on-message-recieved event'ini bağla
+		socket.on('on-message-send', async (msg, ch, si) => await this.onMessageSendHandler(msg, socket, si, ch));
+
+		// Soket event'lerini bağla...
 	}
 }
 
