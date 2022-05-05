@@ -20,8 +20,9 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 const channelSchema = new Schema({
 	name: String,
+	readpermission: [String],
+	writepermission: [String],
 	info: String,
-	permission: [String],
 	photo: String
 });
 

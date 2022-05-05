@@ -31,15 +31,24 @@ class DBMessages
 		return (await data.save());
 	}
 
-	async getMessage(fields, start=undefined, end=undefined)
+	async getUserMessages(userObjectId, ownerFields=undefined, start=undefined, end=undefined)
+	{
+		return (await this.getMessage({
+			owner: userObjectId
+		},
+		ownerFields, start, end));
+	}
+
+	async getMessage(search={}, ownerFields=undefined, start=undefined, end=undefined)
 	{
 		var ret = (await this.model.find({})
 		.sort({sendtime: -1})
-		.populate({ path: 'owner', select: fields }));
+		.populate({ path: 'owner', select: ownerFields }));
 		if (!start && end)
 			ret = ret.slice(end);
 		else if (start && end)
 			ret = ret.slice(start, end);
+
 		return (ret);
 	}
 }

@@ -28,15 +28,18 @@ class SocketManager
 	// sendmessage event'i için tetiklenecek fonksyion
 	async onMessageSendHandler(message, socket, sessionId, channel)
 	{
-		log(channel);
 		if (this.server.isLogged(sessionId))
 		{
 			var user = this.server.getUser(sessionId);
-			this.server.sio.emit('on-message-recieved', user.fullname, message, user.avatar, Date.now());
+			this.server.sio.emit('on-message-recieved', user.fullname, message, user.avatar, Date.now(), channel);
 			this.server.dbMessages.saveMessage({
 				owner: user._id,
 				sendtime: Date.now(),
-				content: message
+				content: message,
+				to: {
+					type: channel.type,
+					id: (await this.server.dbChannels.getChannelIdByName(channel.name))
+				}
 			});
 		}
 		else

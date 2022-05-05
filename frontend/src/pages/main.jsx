@@ -23,6 +23,7 @@ export default class Main extends Component
 	{
 		super(props);
 
+		this.channel = 'genel';
 		this.socket = io();
 		this.socket.on('on-message-recieved', (fullname, message, avatar, time, channel) => this.onMessageRecieved(fullname, message, avatar, time, channel));
 		this.socket.on('on-error', (errMsg) => console.log(errMsg));
@@ -34,6 +35,7 @@ export default class Main extends Component
 
 	async loadMessages()
 	{
+		// TODO: Bulunulan kanaldaki mesajları yükle
 		var msgs =  (await axios.post('/gm')).data;
 		for (var i = 0; i < msgs.length; i++)
 			this.addMessage(msgs[i].content, msgs[i].owner.avatar, msgs[i].owner.fullname, this.formatTime(new Date(msgs[i].sendtime)));
@@ -62,12 +64,19 @@ export default class Main extends Component
 
 	onMessageRecieved(fullname, message, avatar, time, channel)
 	{
-		this.addMessage(message, avatar, fullname, this.formatTime(new Date(time)));
+		if (channel.name === this.channel)
+		{
+			this.addMessage(message, avatar, fullname, this.formatTime(new Date(time)));
+		}
+		else
+		{
+			// TODO: "... kanalında mesaj geldi" şeklinde bildirim gönder
+		}
 	}
 
 	sendMessage(msg)
 	{
-		this.socket.emit('on-message-send', msg, 'general', this.sessionId);
+		this.socket.emit('on-message-send', msg, { name: 'genel', type: 'channel' }, this.sessionId);
 	}
 
 	keyPressedHandler(event)
@@ -135,7 +144,7 @@ export default class Main extends Component
 						<span className="text-white font-bold">Chat</span>
 					</div>
 					<div className="channel bg-gray-800 grow border-1 border-gray-400 hover:overflow-y-auto">
-						<ChannelTemplate channelName="Hello World! :D"></ChannelTemplate>
+						
 					</div>
 				</div>
 				<div className={`grow flex flex-col w-5/6 h-12/12`}>

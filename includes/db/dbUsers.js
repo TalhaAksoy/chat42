@@ -34,6 +34,11 @@ class DBUser
 		return (await data.save());
 	}
 
+	async getUserObjectId(username)
+	{
+		return ((await this.getUser(username))._id.toString());
+	}
+
 	async getUser(username)
 	{
 		return (await this.model.findOne({ username }));

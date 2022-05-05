@@ -22,6 +22,7 @@ const io					= require('socket.io');
 const http					= require('http');
 const path					= require('path');
 const DBMessages			= require('./db/dbMessages');
+const DBChannels			= require('./db/dbChannels');
 const DBUsers				= require('./db/dbUsers');
 const GetRouter				= require('./routers/getrouter');
 const PostRouter			= require('./routers/postrouter');
@@ -39,6 +40,7 @@ class BackendServer
 		this.server = http.createServer(this.app);
 		this.sio = io(this.server);
 		this.dbUsers = new DBUsers();
+		this.dbChannels = new DBChannels();
 		this.dbMessages = new DBMessages();
 
 		this.app.use(bodyParser.urlencoded({ extended: true }));

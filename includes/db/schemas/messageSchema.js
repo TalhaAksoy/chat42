@@ -26,7 +26,8 @@ const messageSchema = new Schema({
 	sendtime: Date,
 	content: String,
 	receiver: mongoose.Schema.Types.ObjectId,
-	messagenumber: Number
+	messagenumber: Number,
+	to: Object
 });
 
 module.exports = messageSchema;
