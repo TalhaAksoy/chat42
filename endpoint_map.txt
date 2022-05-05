@@ -1,0 +1,33 @@
+/gm
+{
+	Type: POST
+	Login Required: true
+	Name: Get messages
+	Information:
+		Returns all messages from database.
+}
+
+/gc
+{
+	Type: POST
+	Login Required: true
+	Name: Get channels
+	Information:
+		Returns all channels are created as JSON.
+}
+
+/il
+{
+	Type: GET
+	Login Required: true
+	Name: Is logged
+	Information:
+		Returns true or false depends on user is logged or not.
+}
+
+/lu
+{
+	Type: GET
+	Login Required: false
+	Name: Login user
+}

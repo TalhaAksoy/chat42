@@ -19,11 +19,26 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 const channelSchema = new Schema({
-	name: String,
-	readpermission: [String],
-	writepermission: [String],
-	info: String,
-	photo: String
+	name: {
+		type: String,
+		required: true
+	},
+	readpermission: {
+		type: [String],
+		default: ['student', 'admin', 'staff']
+	},
+	writepermission: {
+		type: [String],
+		default: ['student', 'admin', 'staff']
+	},
+	info: {
+		type: String,
+		default: 'There is no info for this channel :/'
+	},
+	photo: {
+		type: String,
+		default: '' // TODO: varsayılan kanal resmi ekle
+	}
 });
 
 module.exports = channelSchema;

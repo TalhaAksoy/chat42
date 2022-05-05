@@ -9,7 +9,7 @@ export default class ChannelTemplate extends Component
 				<div className="flex items-end">
 					<div className="flex flex-col space-y-0 text-base max-w-xs mx-0 items-start">
 						<div><span className="px-4 py-2 inline-block rounded-bl-none">
-							<span  className = "text-white"> # </span><span className = "channel-name text-white">{this.props.channelName}</span>
+							<span  className = "text-white"> # </span><span className = "channel-name text-white">{this.props.name}</span>
 						</span></div>
 					</div>
 				</div>

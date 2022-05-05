@@ -25,33 +25,42 @@ class DBChannels
 		this.model = mongo.model('channel', channelSchema);
 	}
 
+	#checkParam(arg)
+	{
+		if (!arg)
+			throw new Error('Parameter cannot be null');
+	}
+	
+	async #getch(search)
+	{
+		let queryResult = (await this.model.find(search))[0];
+		if (!queryResult)
+			throw new Error(`Channel couldn't found with ${search} filter`);
+
+		return (queryResult);
+	}
+
 	async getChannelIdByName(name)
 	{
-		if (!name)
-			throw new Error("'id' cannot be undefined");
-
+		this.#checkParam(name);
 		return ((await this.getChannelByName(name))._id);
 	}
 
 	async getChannelById(id)
 	{
-		if (!id)
-			throw new Error("'id' cannot be undefined");
-
-		return ((await this.model.find({ id: id }))[0]);
+		this.#checkParam(id);
+		return (await this.#getch({ id: id }));
 	}
 
 	async getChannelByName(chName)
 	{
-		if (!chName)
-			throw new Error("'chName' cannot be undefined");
-		
-		return ((await this.model.find({ name: chName }))[0]);
+		this.#checkParam(chName);
+		return (await this.#getch({ name: chName }));
 	}
 
-	async getAllChannels()
+	async getAllChannels(filters={})
 	{
-		return (await this.model.find({}));
+		return (await this.model.find(filters));
 	}
 }
 

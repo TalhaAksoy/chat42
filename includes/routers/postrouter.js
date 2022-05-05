@@ -27,16 +27,29 @@ class PostRouter
 		this.server = server;
 		this.router = express.Router();
 
+		// Get Messages (gm)
 		this.router.post('/gm', async (req, res) => await this.getMessages(req, res));
+
+		this.router.post('/gc', async (req, res) => await this.getChannels(req, res));
 
 		// Router'ı server'a ekle.
 		this.server.app.use(this.router);
 	}
 
+	async getChannels(req, res)
+	{
+		if (req.isLogged())
+			res.send(await this.server.dbChannels.getAllChannels());
+		else
+			res.send({})
+	}
+
 	async getMessages(req, res)
 	{
 		if (req.isLogged())
-			res.send(await this.server.dbMessages.getMessage(['username', 'fullname', 'avatar'], req.query.start, req.query.end));
+		{
+			res.send(await this.server.dbMessages.getMessage({ to: {  } }, ['username', 'fullname', 'avatar'], req.query.start, req.query.end));
+		}
 		else
 			res.send({})
 	}

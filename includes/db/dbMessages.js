@@ -39,10 +39,17 @@ class DBMessages
 		ownerFields, start, end));
 	}
 
-	async getMessage(search={}, ownerFields=undefined, start=undefined, end=undefined)
+	async getChannelMessages()
 	{
-		var ret = (await this.model.find({})
-		.sort({sendtime: -1})
+		
+	}
+
+	async getMessage(search=undefined, ownerFields=undefined, start=undefined, end=undefined)
+	{
+		if (!search)
+			search = {};
+		var ret = (await this.model.find(search)
+		.sort({sendtime: 1})
 		.populate({ path: 'owner', select: ownerFields }));
 		if (!start && end)
 			ret = ret.slice(end);

@@ -29,6 +29,7 @@ export default class Main extends Component
 		this.socket.on('on-error', (errMsg) => console.log(errMsg));
 		this.state = { 
 			messages: [],
+			channels: [],
 			userinfo: {}
 		};
 	}
@@ -43,11 +44,13 @@ export default class Main extends Component
 
 	async componentDidMount()
 	{
+		console.log((await axios.post('/gc')).data);
 		document.body.style.backgroundImage = "url('https://signin.intra.42.fr/assets/background_login-a4e0666f73c02f025f590b474b394fd86e1cae20e95261a6e4862c2d0faa1b04.jpg')";
 		this.sessionId = (await axios.get('/si')).data;
 		await this.setState({
 			...this.state,
-			userinfo: (await axios.get('/userinfo')).data
+			userinfo: (await axios.get('/userinfo')).data,
+			channels: (await axios.post('/gc')).data
 		});
 		this.loadMessages();
 	}
@@ -144,7 +147,12 @@ export default class Main extends Component
 						<span className="text-white font-bold">Chat</span>
 					</div>
 					<div className="channel bg-gray-800 grow border-1 border-gray-400 hover:overflow-y-auto">
-						
+						{
+							this.state.channels.map(ch =>
+							{
+								return (<ChannelTemplate name={ch.name}/>);
+							})
+						}
 					</div>
 				</div>
 				<div className={`grow flex flex-col w-5/6 h-12/12`}>
