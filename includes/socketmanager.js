@@ -38,7 +38,7 @@ class SocketManager
 				content: message,
 				to: {
 					type: channel.type,
-					id: (await this.server.dbChannels.getChannelIdByName(channel.name))
+					name: channel.name
 				}
 			});
 		}

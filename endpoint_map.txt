@@ -3,6 +3,8 @@
 	Type: POST
 	Login Required: true
 	Name: Get messages
+	Parameters:
+		- start : Start range of messages
 	Information:
 		Returns all messages from database.
 }

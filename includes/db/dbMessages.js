@@ -39,9 +39,9 @@ class DBMessages
 		ownerFields, start, end));
 	}
 
-	async getChannelMessages()
+	async getChannelMessages(channelName, ownerFields=undefined, start=undefined, end=undefined)
 	{
-		
+		//return (await this.getMessage({  }))
 	}
 
 	async getMessage(search=undefined, ownerFields=undefined, start=undefined, end=undefined)

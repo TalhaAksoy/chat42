@@ -48,7 +48,13 @@ class PostRouter
 	{
 		if (req.isLogged())
 		{
-			res.send(await this.server.dbMessages.getMessage({ to: {  } }, ['username', 'fullname', 'avatar'], req.query.start, req.query.end));
+			let filter = undefined;
+
+			if (req.body.ch)
+				filter = { 'to': { $elemMatch: { name: req.body.ch } } }
+			let data = await this.server.dbMessages.getMessage(filter, ['username', 'fullname', 'avatar'], req.body.start, req.body.end);
+			console.log(data);
+			res.send(data);
 		}
 		else
 			res.send({})

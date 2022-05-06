@@ -34,17 +34,16 @@ export default class Main extends Component
 		};
 	}
 
-	async loadMessages()
+	async loadMessages(channelName)
 	{
 		// TODO: Bulunulan kanaldaki mesajları yükle
-		var msgs =  (await axios.post('/gm')).data;
+		var msgs =  (await axios.post('/gm', { ch: channelName })).data;
 		for (var i = 0; i < msgs.length; i++)
 			this.addMessage(msgs[i].content, msgs[i].owner.avatar, msgs[i].owner.fullname, this.formatTime(new Date(msgs[i].sendtime)));
 	}
 
 	async componentDidMount()
 	{
-		console.log((await axios.post('/gc')).data);
 		document.body.style.backgroundImage = "url('https://signin.intra.42.fr/assets/background_login-a4e0666f73c02f025f590b474b394fd86e1cae20e95261a6e4862c2d0faa1b04.jpg')";
 		this.sessionId = (await axios.get('/si')).data;
 		await this.setState({
@@ -52,7 +51,7 @@ export default class Main extends Component
 			userinfo: (await axios.get('/userinfo')).data,
 			channels: (await axios.post('/gc')).data
 		});
-		this.loadMessages();
+		this.loadMessages(this.channel);
 	}
 
 	formatTime(date)
