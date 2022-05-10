@@ -6,6 +6,11 @@
 @tailwind components;
 @tailwind utilities;
 
+*
+{
+	color:white;
+}
+
 @media (min-width: 640px) {
 	.sm\:h-1-12 {
 		height: 8.333333%;
@@ -86,6 +91,10 @@
 .bg-darkblue-lower1
 {
 	background-color: #292264;
+}
+.border-b-1 {
+	border-bottom-width: 1px;
+	border-color:rgba(255, 255, 255, 0.3);
 }
 .resizeble
 {
